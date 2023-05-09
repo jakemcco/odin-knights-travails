@@ -1,3 +1,5 @@
-// import favicon from "../assets/favicon.ico";
 import './style.css';
-// import displayController from "./modules/displayController";
+import '@fortawesome/fontawesome-free';
+import initializeWebsite from './modules/website';
+
+initializeWebsite();

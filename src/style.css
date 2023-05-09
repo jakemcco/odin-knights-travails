@@ -1,0 +1,84 @@
+:root {
+    /* Colors */
+
+    /* Fonts */
+
+  }
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+h1, h2, h3, h4, h5, h6, p {
+    padding:0;
+    margin: 0;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+/* Content */
+#content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2rem;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Main */
+.main {
+    width: 100%;
+    /* height: 100%; */
+    padding: 2rem;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Footer */
+.footer {
+    /* If we want to anchor footer at bottom of viewing window */
+        /* position: fixed;
+        bottom: 0; */
+    
+    /* flex-grow: 0; */
+    width: 100%;
+    padding: 2rem;
+    background-color: var(--background-light);
+    border-top: 1px solid var(--border-color);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.fa-github {
+  font-size: 2rem;
+  color: var(--creamy);
+}
+
+.fa-github:hover {
+  color: var(--font-color-dark);
+}
