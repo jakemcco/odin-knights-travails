@@ -13,6 +13,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Knights Travails',
+            template: './src/index-template.html'
         }),
     ],
     output: {
