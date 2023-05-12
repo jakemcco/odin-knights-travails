@@ -1,6 +1,6 @@
 // import favicon from "../assets/favicon.ico";
 
-// import displayController from "./modules/displayController";
+import displayController from "./displayController";
 
 
 /* Header with title and basic navbar */
@@ -65,6 +65,9 @@ function initializeWebsite() {
     content.appendChild(createHeader());
     content.appendChild(createMain());
     content.appendChild(createFooter());
+
+    //Load core content into main
+
 }
 
 export default initializeWebsite;
