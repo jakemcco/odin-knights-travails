@@ -101,6 +101,28 @@ class Graph {
         console.log('After removal: ',this.adjMap.get(edge.from).get(edge.to));
         return true;
     }
+
+    snapshot() {
+        let output = {};
+
+        // this.adjMap.forEach((val, key, adjMap) => {
+        //     console.log(key, val);
+        //     let tmp = [...(val.keys())];
+        //     output[key.data] = [...tmp.map((vert) => vert.data)];
+        // });
+        
+        this.adjMap.forEach((val, key, adjMap) => {
+            console.log('key: ', key);
+            console.log('value: ', val, [...val.keys()].map(e => e.data));
+            console.log('first edge data: ', val.values().next().value[0].data);
+            console.log('-------------------------');
+            //spread all entries {Vertex} into an array, then replace vertices with their data
+            //[].map applies function to each element and returns a new array of modified elements
+            output[key.data] = [...(val.keys())].map((vert) => vert.data);
+        });
+
+        return output;
+    }
 }
 
 /* Testing */
@@ -122,11 +144,13 @@ g.addEdge(eAB);
 g.addEdge(eAC1);
 g.addEdge(eAC2);
 
-console.log(g.verts);
-console.log(g.adjMap);
-g.removeEdge(eAC1);
+// console.log(g.verts);
+// console.log(g.adjMap);
+// g.removeEdge(eAC1);
 
-g.removeVertex(b);
+// g.removeVertex(b);
+// console.log(g.verts);
+// console.log(g.adjMap);
 
-console.log(g.verts);
-console.log(g.adjMap);
+
+console.log(g.snapshot());

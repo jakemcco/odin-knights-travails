@@ -29,6 +29,8 @@ function createMain() {
                     classList: 'main',
                 });
 
+    //Call core content creation, append to main.
+    main.append(A, B, C, D);
     return main;
 }
 
@@ -65,8 +67,6 @@ function initializeWebsite() {
     content.appendChild(createHeader());
     content.appendChild(createMain());
     content.appendChild(createFooter());
-
-    //Load core content into main
 
 }
 

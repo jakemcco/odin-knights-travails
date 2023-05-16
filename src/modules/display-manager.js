@@ -1,12 +1,21 @@
 
-const gameContainer;
+/*
+Create/Read/Update/Delete DOM elements
+Handle user input --> options, request game actions be performed
+Handle game state manager calls (update display, render results)
+Render DOM elements
+*/
 
-const main = document.getElementById('main');
-main.appendChild(gameContainer);
-
-gameContainer.append(chessBoard, gameOptions);
 
 
+
+const displayManager() => {
+
+    inintializeDOM(){
+        
+    }
+
+}();
 /*
 UI Features
 Display board
@@ -62,4 +71,4 @@ Testing:
 */
 
 
-export default displayController;
+export default displayManager;
