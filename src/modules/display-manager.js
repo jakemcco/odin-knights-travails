@@ -6,16 +6,32 @@ Handle game state manager calls (update display, render results)
 Render DOM elements
 */
 
+class DisplayManager {
+    constructor (){
+        this.dom = initDOM();
+
+    }
+
+    initDOM() {
+        const main = document.getElementById('main');
+
+        const gameContainer = Object.assign(document.createElement('div'),
+        {
+            id: 'game-container',
+            classList: 'game-container',
+        });
+        
 
 
 
-const displayManager() => {
-
-    inintializeDOM(){
         
     }
 
-}();
+
+}
+
+
+
 /*
 UI Features
 Display board
@@ -71,4 +87,4 @@ Testing:
 */
 
 
-export default displayManager;
+export default DisplayManager;

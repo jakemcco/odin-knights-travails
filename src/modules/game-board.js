@@ -12,7 +12,7 @@ class Cell {
     }
 }
 
-class GameBoard {
+export default class GameBoard {
     constructor(size = 8) {
         this.size = size;
         this.cells = this.createBoard(this.size);
@@ -96,11 +96,12 @@ class GameBoard {
     
 }
 
-// export default GameBoard;
 
-let myBoard = new GameBoard;
+/* Testing Stuff */
 
-let testCell = myBoard.getCellByCoords(2,3);
+// let myBoard = new GameBoard;
 
-const testRow = myBoard.getRowofCells(2);
-const testArr = myBoard.getAllRows();
+// let testCell = myBoard.getCellByCoords(2,3);
+
+// const testRow = myBoard.getRowofCells(2);
+// const testArr = myBoard.getAllRows();

@@ -76,9 +76,9 @@ body {
 
 .fa-github {
   font-size: 2rem;
-  color: var(--creamy);
+  color: black;
 }
 
 .fa-github:hover {
-  color: var(--font-color-dark);
+  color: goldenrod;
 }

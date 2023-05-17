@@ -1,6 +1,5 @@
 // import favicon from "../assets/favicon.ico";
-
-import displayController from "./displayController";
+import createKnightGame from "./knight-game.js";
 
 
 /* Header with title and basic navbar */
@@ -29,8 +28,22 @@ function createMain() {
                     classList: 'main',
                 });
 
-    //Call core content creation, append to main.
-    main.append(A, B, C, D);
+    //Create core DOM stuff, append to main.
+    const gameContainer = Object.assign(document.createElement('div'),
+    {
+        id: 'game-container',
+        classList: 'game-container',
+    });
+
+
+    //Define as needed
+    const options = {
+        boardsize: 8,
+        knightStart: {x:2, y:2},
+        knightGoal: {x:6, y:6}
+    }
+    createKnightGame(gameContainer, options);
+    main.append(gameContainer);
     return main;
 }
 
@@ -67,6 +80,10 @@ function initializeWebsite() {
     content.appendChild(createHeader());
     content.appendChild(createMain());
     content.appendChild(createFooter());
+
+    // Primary site functionality
+    // const inputHandler = new InputHandler;
+    //window.KNIGHTGAME.start(); 
 
 }
 
