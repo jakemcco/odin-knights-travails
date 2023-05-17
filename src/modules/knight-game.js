@@ -17,7 +17,6 @@ export default function createKnightGame(container, options = defaultOptions) {
             this.knightStart = gameOptions.knightStart;
             this.knightGoal = gameOptions.knightGoal;
             this.board = new GameBoard(this.boardsize);
-            console.log(gameDOMContainer === null);
             if (!(gameDOMContainer === null)){
                 this.createDOM(gameDOMContainer);
             };
@@ -30,12 +29,34 @@ export default function createKnightGame(container, options = defaultOptions) {
                             id: 'game-board',
                             classList: 'game-board'
                             });
+
+            //Create and add cells to board row-by-row, prepending from bottom up to preserve ordering with x/y origin on bottom right
+            for (let row of this.board.getAllRows()){
+                row.reverse().forEach((cell) => {
+                    const cellDOM = Object.assign(document.createElement('div'),
+                                    {
+                                    classList: 'cell',
+                                    textContent: `${cell.x}, ${cell.y}`,
+                                    });
+                    cellDOM.setAttribute('data-xCoord', `${cell.x}`);
+                    cellDOM.setAttribute('data-yCoord', `${cell.y}`);
+                    cellDOM.setAttribute('data-contents', `${cell.contents}`);
+                    cellDOM.style.backgroundColor = cell.color;
+                    cellDOM.style.color = cell.fontColor;
+                    boardDOM.prepend(cellDOM);
+                })
+            }
+
             container.append(boardDOM);
-            
-            //Create and add cells to board row-by-row, prepending from bottom up to preserve ordering
-
-
+            const btnContainer = Object.assign(document.createElement('div'),
+                                {
+                                id: 'game-options-container',
+                                classList: 'game-options-container',
+                                textContent: 'Options Placeholder',
+                                });
+            container.append(btnContainer);
             //Create and add buttons/options
+
         };
     };
 

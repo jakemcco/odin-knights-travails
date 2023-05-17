@@ -4,7 +4,8 @@ class Cell {
         this.x = x;
         this.y = y;
         this.contents = contents;
-        this.color = 'yellow';
+        this.color = 'green';
+        this.fontColor = 'goldenrod';
     }
 
     clearContents() {
@@ -26,10 +27,12 @@ export default class GameBoard {
             for (let i = 1; i <= requestedSize; i++) {
                 const cell = new Cell(i, j);
                 //Determine cell color
-                if (i % 2 && !(j % 2)) {
+                if ((i % 2 && !(j % 2)) || (!(i % 2) && (j % 2))) {
                     cell.color = 'white';
+                    cell.fontColor = 'black';
                 } else {
                     cell.color = 'black';
+                    cell.fontColor = 'white';
                 }
                 cells[[i,j]] = cell;
             }
