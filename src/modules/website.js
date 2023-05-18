@@ -40,7 +40,7 @@ function createMain() {
     const options = {
         boardsize: 8,
         knightStart: {x:2, y:2},
-        knightGoal: {x:6, y:6}
+        knightGoal: {x:8, y:8}
     }
     createKnightGame(gameContainer, options);
     main.append(gameContainer);

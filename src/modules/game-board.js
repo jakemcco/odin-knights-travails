@@ -48,7 +48,8 @@ export default class GameBoard {
         if (this.areCoordsValid(x, y)) {
             return this.cells[[x,y]];
         } else {
-            throw Error ('Invalid cell requested, x or y out of range');
+            return false
+            // throw Error ('Invalid cell requested, x or y out of range');
         }
     }
 

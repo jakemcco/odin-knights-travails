@@ -1,8 +1,10 @@
 
 
 class Vertex {
-    constructor(data = null) {
+    constructor(data = null, distFromRoot = null, parent = null) {
         this.data = data;
+        this.distFromRoot = distFromRoot;
+        this.parent = parent;
         //this.connections = new Map; //key: vertex, value: edge list object (supports multiple edges between two vertices)
     }
 }
@@ -22,6 +24,7 @@ class Edge {
 
 class Graph {
     constructor() {
+        //Keeps track of verts
         this.verts = new Set;
         this.adjMap = new Map; //key:vertex, value: Set of vertices with values being edge lists
     }
@@ -64,14 +67,14 @@ class Graph {
         if (!this.verts.has(edge.from) || !this.verts.has(edge.to)) throw Error('Invalid edge, verts no in graph');
 
         //If there's no key, create the array
-        if (g.adjMap.get(edge.from).get(edge.to) === undefined) {
-            g.adjMap.get(edge.from).set(edge.to, [edge]);
-            g.adjMap.get(edge.to).set(edge.from, [edge]);
+        if (this.adjMap.get(edge.from).get(edge.to) === undefined) {
+            this.adjMap.get(edge.from).set(edge.to, [edge]);
+            this.adjMap.get(edge.to).set(edge.from, [edge]);
         }
         //Otherwise, add this edge to the existing array
         else {
-            g.adjMap.get(edge.from).get(edge.to).push(edge);
-            g.adjMap.get(edge.to).get(edge.from).push(edge);
+            this.adjMap.get(edge.from).get(edge.to).push(edge);
+            this.adjMap.get(edge.to).get(edge.from).push(edge);
         }
 
         return true;
@@ -127,30 +130,32 @@ class Graph {
 
 /* Testing */
 
-let g = new Graph;
-let a = new Vertex('A');
-let b = new Vertex('B');
-let c = new Vertex('C');
+// let g = new Graph;
+// let a = new Vertex('A');
+// let b = new Vertex('B');
+// let c = new Vertex('C');
 
-g.addVertex(a);
-g.addVertex(b);
-g.addVertex(c);
+// g.addVertex(a);
+// g.addVertex(b);
+// g.addVertex(c);
 
-let eAB = new Edge(a, b,100);
-let eAC1 = new Edge(a, c, 50);
-let eAC2 = new Edge(a, c, 333);
+// let eAB = new Edge(a, b,100);
+// let eAC1 = new Edge(a, c, 50);
+// let eAC2 = new Edge(a, c, 333);
 
-g.addEdge(eAB);
-g.addEdge(eAC1);
-g.addEdge(eAC2);
+// g.addEdge(eAB);
+// g.addEdge(eAC1);
+// g.addEdge(eAC2);
 
-// console.log(g.verts);
-// console.log(g.adjMap);
-// g.removeEdge(eAC1);
+// // console.log(g.verts);
+// // console.log(g.adjMap);
+// // g.removeEdge(eAC1);
 
-// g.removeVertex(b);
-// console.log(g.verts);
-// console.log(g.adjMap);
+// // g.removeVertex(b);
+// // console.log(g.verts);
+// // console.log(g.adjMap);
 
 
-console.log(g.snapshot());
+// console.log(g.snapshot());
+
+export {Vertex, Edge, Graph}
