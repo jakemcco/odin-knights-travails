@@ -22,6 +22,7 @@ export default function createKnightGame(container, options = defaultOptions) {
             this.boardsize = gameOptions.boardsize;
             this.knightStart = gameOptions.knightStart;
             this.knightGoal = gameOptions.knightGoal;
+            this.svgArray = [];
             //Init
             this._init();
         }
@@ -134,11 +135,25 @@ export default function createKnightGame(container, options = defaultOptions) {
         _drawMoveArrow(elem1, elem2, options = {}) {
             //This approach connects edge-to-edge
             // const line = new LeaderLine(elem1, elem2);
-            //This approach connects center to center
+            //This approach connects center to center with x & y offsets
             const line = new LeaderLine(
-                LeaderLine.pointAnchor(elem1),
-                LeaderLine.pointAnchor(elem2),
-                options)
+                LeaderLine.pointAnchor(elem1, {
+                    x: '50%',
+                    y: '50%'
+                }),
+                LeaderLine.pointAnchor(elem2, {
+                    x: '50%',
+                    y: '50%'
+                }),
+                options);
+            //This is super-critical to prevent an inital offset.
+            line.position();
+            /*
+            Without line.position() when created at a given screen size, the start and end points of the arrows are ~ 10px to the left of center.
+            When the screen size is adjusted, i.e. in Dev Tools, the svgs all immediately change to the correct start/end points. due to an event listener that is implemented.
+            See owner's comments here: https://github.com/anseki/leader-line/issues/50#issuecomment-477848804
+            */
+            this.svgArray.push(line);
         };
 
         _drawKnightPath(arrOfCells) {
@@ -147,7 +162,11 @@ export default function createKnightGame(container, options = defaultOptions) {
             for (let i = 0; i < arrOfCells.length; i++){
                 let toCell = arrOfCells[i];
                 let toElem = this.getCellDOMByCoords(toCell.x, toCell.y);
-                this._drawMoveArrow(fromElem, toElem, {color: 'red', size: 5, path: 'straight'});
+                this._drawMoveArrow(fromElem, toElem, {
+                    color: 'red',
+                    size: 5,
+                    path: 'straight'
+                });
                 fromElem = toElem;
             }
 
@@ -167,7 +186,6 @@ export default function createKnightGame(container, options = defaultOptions) {
             svgContainer.appendChild(llDefs);
     
         }
-
 
         //Helper function to access the board cell by coordinates
         getCellDOMByCoords(x, y) {
