@@ -1,8 +1,11 @@
 //Handles calculations for how we want to move the knight
 
-import {Vertex, Edge, Graph} from "./vertex.js";
+import {Vertex, Edge, Graph} from "./graph.js";
 import {Cell} from "./game-board.js";
 
+/*
+Agent class holds the logic for graph search
+*/
 
 class Agent {
     constructor(){
@@ -68,6 +71,7 @@ class Agent {
 
     /*BFS to find the shortest path
         We create a graph out of vertex abstractions of our board cells so as to not modify the cell objects themselves.
+        Currently does not make use of Edge class from Graph module
     */
     _calcKnightMove(board, fromCell, goalCell) {
         let goalFound = false;
@@ -77,12 +81,17 @@ class Agent {
         const currQ = [];
         const nextQ = [];
         const rootVert = this._createVertFromUniqueObj(fromCell, currDepth);
-        let goalVert = null;
+        let goalVert = null; //Is later set once we've found our goal
         const g = new Graph;
         g.addVertex(rootVert);
         currQ.push(rootVert);
 
+        //Core search loop with failsafe  of depth
         while (!goalFound && (currDepth < maxDepth)){
+            /*
+            At the current depth (currQ), evaluate each vertex for goal and expand
+            all previously undiscovered children for evaluation at the next depth
+            */
             while(currQ.length != 0) {
                 let tmpVec = currQ.shift(); //Dequeue vec
                 //Check for goal equivalency

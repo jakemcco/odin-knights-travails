@@ -10,21 +10,30 @@ const defaultOptions = {
 
 export default function createKnightGame(container, options = defaultOptions) {
 
-    //Create global object for our application using IIFE
+    /*
+    Create global class for our application
+    Game state is independent of DOM, DOM dependent on Game state    
+    */
     class Game {
         constructor(gameDOMContainer, gameOptions) {
+            this.gameDOMContainer = gameDOMContainer;
+            this.gameOptions = gameOptions;
             this.boardsize = gameOptions.boardsize;
             this.knightStart = gameOptions.knightStart;
             this.knightGoal = gameOptions.knightGoal;
+            //Init
+            this._init();
+        }
+
+        //Internal method for constructor to call
+        _init(){
             this.board = new GameBoard(this.boardsize);
             this.agent = new Agent;
             // this.inputMgr = new InputManager;
-            if (!(gameDOMContainer === null)){
-                this.createDOM(gameDOMContainer);
-                this.createEventListeners(gameDOMContainer);
+            if (!(this.gameDOMContainer === null)){
+                this.createDOM(this.gameDOMContainer);
+                this.createEventListeners(this.gameDOMContainer);
             };
-            this.knightCell = null;
-            this.goalCell = null;
             this.setPositions();
         }
 
@@ -55,6 +64,8 @@ export default function createKnightGame(container, options = defaultOptions) {
             }
 
             container.append(boardDOM);
+
+            //Create and add buttons/options
             const btnContainer = Object.assign(document.createElement('div'),
                                 {
                                 id: 'game-options-container',
@@ -62,7 +73,7 @@ export default function createKnightGame(container, options = defaultOptions) {
                                 textContent: 'Options Placeholder',
                                 });
             container.append(btnContainer);
-            //Create and add buttons/options
+
 
         };
 
@@ -102,21 +113,16 @@ export default function createKnightGame(container, options = defaultOptions) {
             this.goalCell.contents = 'goal';
         }
 
-        placePiece(piece, coordinates) {
-
+        placePiece() {
+            this.piece = 'test piece';
         }
 
         findKnightPath() {
             console.log(this.knightCell, this.goalCell);
             console.log(this.agent.calcKnightPath(this.board, this.knightCell, this.goalCell));
-
         }
-
-
-    
-
-
     };
 
+    //Create global game object
     window.KNIGHTGAME = new Game(container, options);
 };
