@@ -35,6 +35,21 @@ module.exports = {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
                 type: 'asset/resource',
             },
+            /*
+            For leader-line library, from the author
+            https://github.com/anseki/leader-line/issues/8
+            https://www.npmjs.com/package/skeleton-loader
+
+            Alternative is to manually put the following line at the bottom of the leader-line.min.js file:
+            export default LeaderLine
+            */
+            {
+                test: path.resolve(__dirname, 'node_modules/leader-line/'),
+                use: [{
+                  loader: 'skeleton-loader',
+                  options: {procedure: content => `${content}export default LeaderLine`}
+                }]
+            },
         ],
     },
     optimization: {

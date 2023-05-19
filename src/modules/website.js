@@ -1,5 +1,8 @@
 // import favicon from "../assets/favicon.ico";
 import createKnightGame from "./knight-game.js";
+import LeaderLine from "leader-line";
+
+// from "../../node_modules/leader-line/leader-line.min.js"
 
 
 /* Header with title and basic navbar */
@@ -80,11 +83,8 @@ function initializeWebsite() {
     content.appendChild(createHeader());
     content.appendChild(createMain());
     content.appendChild(createFooter());
-
     // Primary site functionality
-    // const inputHandler = new InputHandler;
-    //window.KNIGHTGAME.start(); 
-
+    window.KNIGHTGAME.findKnightPath();
 }
 
 export default initializeWebsite;

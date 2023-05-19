@@ -56,9 +56,25 @@ body {
     justify-content: flex-start;
 }
 
-.game-board {
+/* .game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+} */
+
+
+.board-container {
+  /* align-self: stretch; */
+  justify-items: center;
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(2, minmax(50px, auto));
+  grid-template-rows: repeat(2, minmax(50px, auto));
+}
+
+.cell-container {
+  display: grid;
+  grid-template-columns: repeat(8, 80px);
   gap: 1px;
   background-color: #000;
   border: 1px solid #000;

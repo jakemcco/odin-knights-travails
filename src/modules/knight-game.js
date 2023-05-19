@@ -1,6 +1,7 @@
 import GameBoard from "./game-board.js";
 // import Knight from "./modules/knight.js";
 import Agent from "./agent.js";
+import LeaderLine from "leader-line";
 
 const defaultOptions = {
     boardsize: 8,
@@ -40,12 +41,39 @@ export default function createKnightGame(container, options = defaultOptions) {
         //Create the board, cells, and options DOM elements
         createDOM(container) {
             //Create and add board
-            const boardDOM = Object.assign(document.createElement('div'),
+            const boardContainer = Object.assign(document.createElement('div'),
                             {
-                            id: 'game-board',
-                            classList: 'game-board'
+                            id: 'board-container',
+                            classList: 'board-container'
                             });
 
+            const cellContainer = Object.assign(document.createElement('div'),
+                            {
+                            id: 'cell-container',
+                            classList: 'cell-container'
+                            });
+
+            const leftAxis = Object.assign(document.createElement('div'),
+                            {
+                            id: 'left-axis',
+                            classList: 'left-axis',
+                            textContent: 'temp'
+                            });
+            
+            const bottomAxis = Object.assign(document.createElement('div'),
+                            {
+                            id: 'bottom-axis',
+                            classList: 'bottom-axis',
+                            textContent: 'temp'
+                            });
+
+            const axisLabels = Object.assign(document.createElement('div'),
+                            {
+                            id: 'axis-labels',
+                            classList: 'axis-labels',
+                            textContent: 'xy'
+                            });
+            
             //Create and add cells to board row-by-row, prepending from bottom up to preserve ordering with x/y origin on bottom right
             for (let row of this.board.getAllRows()){
                 row.reverse().forEach((cell) => {
@@ -59,11 +87,12 @@ export default function createKnightGame(container, options = defaultOptions) {
                     cellDOM.setAttribute('data-contents', `${cell.contents}`);
                     cellDOM.style.backgroundColor = cell.color;
                     cellDOM.style.color = cell.fontColor;
-                    boardDOM.prepend(cellDOM);
+                    cellContainer.prepend(cellDOM);
                 })
             }
 
-            container.append(boardDOM);
+            boardContainer.append(leftAxis, cellContainer, axisLabels, bottomAxis);
+            container.append(boardContainer);
 
             //Create and add buttons/options
             const btnContainer = Object.assign(document.createElement('div'),
@@ -95,6 +124,51 @@ export default function createKnightGame(container, options = defaultOptions) {
             //);
         }
 
+
+        /* TODO:
+
+        Currently when executed at a given screen size, the start and end points of the arrows are ~ 10px to the left of center.
+        When the screen size is adjusted, i.e. in Dev Tools, the svg immediately changes to the correct start/end points.
+
+        */
+        _drawMoveArrow(elem1, elem2, options = {}) {
+            //This approach connects edge-to-edge
+            // const line = new LeaderLine(elem1, elem2);
+            //This approach connects center to center
+            const line = new LeaderLine(
+                LeaderLine.pointAnchor(elem1),
+                LeaderLine.pointAnchor(elem2),
+                options)
+        };
+
+        _drawKnightPath(arrOfCells) {
+            let fromCell = this.knightCell;
+            let fromElem = this.getCellDOMByCoords(fromCell.x, fromCell.y);
+            for (let i = 0; i < arrOfCells.length; i++){
+                let toCell = arrOfCells[i];
+                let toElem = this.getCellDOMByCoords(toCell.x, toCell.y);
+                this._drawMoveArrow(fromElem, toElem, {color: 'red', size: 5, path: 'straight'});
+                fromElem = toElem;
+            }
+
+            //Organize our svgs that otherwise are dumped into the document body by leader-line module
+            let parentContainer = document.querySelector('#game-container');
+            let svgContainer = document.createElement('div')
+            svgContainer.classList.add('svg-container');
+            parentContainer.appendChild(svgContainer);
+
+            let tmpSVGs = document.querySelectorAll('.leader-line');
+            console.log(tmpSVGs);
+            tmpSVGs.forEach((node) => {
+                svgContainer.appendChild(node);
+            });
+            let llDefs = document.getElementById('leader-line-defs');
+            console.log(llDefs);
+            svgContainer.appendChild(llDefs);
+    
+        }
+
+
         //Helper function to access the board cell by coordinates
         getCellDOMByCoords(x, y) {
             if (!this.board.areCoordsValid(x, y)) {
@@ -119,7 +193,9 @@ export default function createKnightGame(container, options = defaultOptions) {
 
         findKnightPath() {
             console.log(this.knightCell, this.goalCell);
-            console.log(this.agent.calcKnightPath(this.board, this.knightCell, this.goalCell));
+            const path = this.agent.calcKnightPath(this.board, this.knightCell, this.goalCell);
+            console.log(path);
+            this._drawKnightPath(path);
         }
     };
 
