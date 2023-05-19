@@ -110,12 +110,6 @@ export default function createKnightGame(container, options = defaultOptions) {
             console.log(this.knightCell, this.goalCell);
             console.log(this.agent.calcKnightPath(this.board, this.knightCell, this.goalCell));
 
-            //Testing
-            // const testCell1 = this.board.getCellByCoords(3, 4);
-            // const testCell2 = this.board.getCellByCoords(3, 4);
-            // console.log(testCell1 === testCell2);
-            // console.log(this.agent.calcKnightPath(this.board, testCell1, testCell2));
-
         }
 
 

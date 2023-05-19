@@ -25,7 +25,7 @@ class Agent {
         //Check to see if key exists
         if (!this.vertsFromObjs.has(obj)) {
             const vert = new Vertex(obj, distFromRoot, parent);
-            this.vertsFromObjs[obj] = vert;
+            this.vertsFromObjs.set(obj, vert);
             return vert;
         } else {
             throw Error ('A vert for this object already exists')
@@ -56,7 +56,6 @@ class Agent {
     }
 
     _compileCellPath(goalVert) {
-        console.log(goalVert.parent)
         let path = [];
         let tmp = goalVert;
         while(tmp.parent){
@@ -82,67 +81,54 @@ class Agent {
         const g = new Graph;
         g.addVertex(rootVert);
         currQ.push(rootVert);
+
         while (!goalFound && (currDepth < maxDepth)){
             while(currQ.length != 0) {
-                let tmp = currQ.shift();
-                console.log('tmp.data: ',tmp.data);
-                console.log('tmp.data equality check: ', tmp.data === goalCell);
-                if (tmp.data === goalCell){
-                    goalVert = tmp;
+                let tmpVec = currQ.shift(); //Dequeue vec
+                //Check for goal equivalency
+                if (tmpVec.data === goalCell){
+                    goalVert = tmpVec;
                     goalFound = true;
                     break;
                 }
+                //Otherwise proceed to expand adjacent vertices
                 else {
-                    console.log('does this ever get triggered????');
                     //array of moves that would land on the board (cells exist)
-                    let unfilteredAdjCells = this._calculateValidKnightMoves(board, tmp.data);
-
-                    console.log(unfilteredAdjCells);
+                    let unfilteredAdjCells = this._calculateValidKnightMoves(board, tmpVec.data);
 
                     //filtered for cells that have already had corresponding vertices created either in a previous search depth or earlier in this depth
                     let filteredAdjCells = unfilteredAdjCells.filter((cell) => {
                         return !(this.vertsFromObjs.has(cell));
                     });
 
-                    console.log(filteredAdjCells);
-
                     //Create vertices for these newly discovered cells
                     let adjVerts = filteredAdjCells.map((cell) => {
-                        return this._createVertFromUniqueObj(cell, currDepth+1, tmp);
+                        return this._createVertFromUniqueObj(cell, currDepth+1, tmpVec);
                     });
-
-                    console.log(adjVerts);
 
                     //Add verts and edges to graph, add these new verts to queue for evaluation at the next depth
                     adjVerts.forEach((vert) => {
                         g.addVertex(vert);
-                        let newEdge = new Edge(tmp, vert);
+                        let newEdge = new Edge(tmpVec, vert);
                         g.addEdge(newEdge);
                         nextQ.push(vert);
-                        console.log('heres the pushed vert: ', nextQ);
                     })
-
-
-                    /*
-                    build list of valid adj cell objs that can be our next move
-                    filter list against vertsFromObjs (already visited)
-                    create verts from the filtered cell objs
-                    add verts to graph
-                    add edges between tmp and new verts
-                    push adjVerts to next queue
-                    */
                 }
             }
-            nextQ.forEach((elem) => {
-                currQ.push(elem);
-            });
-
-            console.log('new currQ: ', currQ);
-            nextQ.length = 0;
-            currDepth += 1;
-            console.log('newDepth', currDepth);
+            //Keeps us from doing the end of loop stuff if we've found the goal this time.
+            if(goalFound){
+                break;
+            }
+            else {
+                nextQ.forEach((elem) => {
+                    currQ.push(elem);
+                });
+                nextQ.length = 0; //Keeps existing array but sets to []
+                currDepth += 1;
+            }
         }
 
+        //Check reasons we've exited our search loop
         if (goalFound) {
             const cellPath = this._compileCellPath(goalVert)
             return cellPath;
@@ -154,25 +140,6 @@ class Agent {
         else {
             throw Error ('Not sure how this got triggered. _calcKnightMove')
         }
-
-            //Create a list of all valid moves from current position
-                //Valid moves that haven't been visited
-            //Add each potential new move to the pending queue for visiting
-            //While existing queue has elements in it, for each new unvisited cell
-                /*
-                evaluate if this is the goal cell
-                    y? --> add current cell to stack, flag search to end
-                
-                    n? --> add current cell to stack, then calculate moves from this cell
-                    return this._calcKnightMove(board,)
-                
-                */
-               //when each cell at this level has been visited (queue is empty), check flags for goal having been found
-                /*
-                if flagged --> return path to goal
-                else --> set current queue = pending queue, empty pending queue
-
-                */
     }
 
 
@@ -184,7 +151,6 @@ class Agent {
         else {
             path = this._calcKnightMove(board, knightCell, goalCell);
         }
-        //return [cell1, cell2, cell3...]
         return path;
     }
 }

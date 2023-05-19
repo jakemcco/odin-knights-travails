@@ -1,5 +1,5 @@
 
-class Cell {
+export class Cell {
     constructor(x, y, contents = null) {
         this.x = x;
         this.y = y;
