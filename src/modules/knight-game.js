@@ -22,7 +22,7 @@ export default function createKnightGame(container, options = defaultOptions) {
             this.boardsize = gameOptions.boardsize;
             this.knightStart = gameOptions.knightStart;
             this.knightGoal = gameOptions.knightGoal;
-            this.svgArray = [];
+            this.leaderLineArray = [];
             //Init
             this._init();
         }
@@ -31,12 +31,11 @@ export default function createKnightGame(container, options = defaultOptions) {
         _init(){
             this.board = new GameBoard(this.boardsize);
             this.agent = new Agent;
-            // this.inputMgr = new InputManager;
             if (!(this.gameDOMContainer === null)){
                 this.createDOM(this.gameDOMContainer);
                 this.createEventListeners(this.gameDOMContainer);
             };
-            this.setPositions();
+            // this.setPositions();
         }
 
         //Create the board, cells, and options DOM elements
@@ -153,11 +152,11 @@ export default function createKnightGame(container, options = defaultOptions) {
             When the screen size is adjusted, i.e. in Dev Tools, the svgs all immediately change to the correct start/end points. due to an event listener that is implemented.
             See owner's comments here: https://github.com/anseki/leader-line/issues/50#issuecomment-477848804
             */
-            this.svgArray.push(line);
+            this.leaderLineArray.push(line);
         };
 
-        _drawKnightPath(arrOfCells) {
-            let fromCell = this.knightCell;
+        _drawKnightPath(startCell, arrOfCells) {
+            let fromCell = startCell;
             let fromElem = this.getCellDOMByCoords(fromCell.x, fromCell.y);
             for (let i = 0; i < arrOfCells.length; i++){
                 let toCell = arrOfCells[i];
@@ -165,26 +164,31 @@ export default function createKnightGame(container, options = defaultOptions) {
                 this._drawMoveArrow(fromElem, toElem, {
                     color: 'red',
                     size: 5,
-                    path: 'straight'
+                    path: 'straight',
+                    endLabel: LeaderLine.captionLabel((i+1).toString(), {
+                        offset: [0, 0],
+                        fontSize: '2rem',
+                        color: 'red',
+                        outlineColor: '', //no outline drawn
+                    })
                 });
                 fromElem = toElem;
             }
 
             //Organize our svgs that otherwise are dumped into the document body by leader-line module
-            let parentContainer = document.querySelector('#game-container');
-            let svgContainer = document.createElement('div')
-            svgContainer.classList.add('svg-container');
-            parentContainer.appendChild(svgContainer);
+            // let parentContainer = document.querySelector('#game-container');
+            // let svgContainer = document.createElement('div')
+            // svgContainer.classList.add('svg-container');
+            // parentContainer.appendChild(svgContainer);
 
-            let tmpSVGs = document.querySelectorAll('.leader-line');
-            console.log(tmpSVGs);
-            tmpSVGs.forEach((node) => {
-                svgContainer.appendChild(node);
-            });
-            let llDefs = document.getElementById('leader-line-defs');
-            console.log(llDefs);
-            svgContainer.appendChild(llDefs);
-    
+            // let tmpSVGs = document.querySelectorAll('.leader-line');
+            // console.log(tmpSVGs);
+            // tmpSVGs.forEach((node) => {
+            //     svgContainer.appendChild(node);
+            // });
+            // let llDefs = document.getElementById('leader-line-defs');
+            // console.log(llDefs);
+            // svgContainer.appendChild(llDefs);
         }
 
         //Helper function to access the board cell by coordinates
@@ -209,11 +213,59 @@ export default function createKnightGame(container, options = defaultOptions) {
             this.piece = 'test piece';
         }
 
-        findKnightPath() {
-            console.log(this.knightCell, this.goalCell);
-            const path = this.agent.calcKnightPath(this.board, this.knightCell, this.goalCell);
-            console.log(path);
-            this._drawKnightPath(path);
+        findKnightPath(startCell, goalCell) {
+            const path = this.agent.calcKnightPath(this.board, startCell, goalCell);
+            console.log('path found: ', path);
+            //Delete existing lines
+            console.log('llarray before remove: ', this.leaderLineArray);
+            for (let line of this.leaderLineArray) {
+                line.remove();
+            }
+            this.leaderLineArray = [];
+            // this.leaderLineArray.forEach((line) => {
+            //     line.remove()
+            //     this.leaderLineArray.shift();
+            // });
+            console.log('llarray after remove: ', this.leaderLineArray);
+
+            //Draw the move arrows between cells
+            this._drawKnightPath(startCell, path);
+            console.log('llarray after _drawKnightPath: ', this.leaderLineArray);
+
+        }
+
+        // The maximum is inclusive and the minimum is inclusive
+        _getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1) + min); 
+          }
+
+        _delay(milliseconds){
+            return new Promise(resolve => {
+                setTimeout(resolve, milliseconds);
+            });
+        }
+
+        async loopFindKnightPath() {
+            const maxIterations = 20;
+            let iterationCount = 0;
+            while (iterationCount < maxIterations) {
+
+                let x1 = this._getRandomIntInclusive(1, 8);
+                let y1 = this._getRandomIntInclusive(1, 8);
+
+                let x2 = this._getRandomIntInclusive(1, 8);
+                let y2 = this._getRandomIntInclusive(1, 8);
+
+                let startCell = this.board.getCellByCoords(x1, y1);
+                let goalCell = this.board.getCellByCoords(x2, y2);
+                console.log('start cell: ', startCell, 'goal cell: ', goalCell);
+                this.findKnightPath(startCell, goalCell);
+                await this._delay(2000);
+                iterationCount++;
+            }
+            
         }
     };
 

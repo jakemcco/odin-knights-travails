@@ -42,7 +42,7 @@ function createMain() {
     //Define as needed
     const options = {
         boardsize: 8,
-        knightStart: {x:2, y:2},
+        knightStart: {x:8, y:1},
         knightGoal: {x:8, y:8}
     }
     createKnightGame(gameContainer, options);
@@ -84,7 +84,8 @@ function initializeWebsite() {
     content.appendChild(createMain());
     content.appendChild(createFooter());
     // Primary site functionality
-    window.KNIGHTGAME.findKnightPath();
+    //window.KNIGHTGAME.findKnightPath();
+    window.KNIGHTGAME.loopFindKnightPath();
 }
 
 export default initializeWebsite;

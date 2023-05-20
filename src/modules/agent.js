@@ -140,6 +140,7 @@ class Agent {
         //Check reasons we've exited our search loop
         if (goalFound) {
             const cellPath = this._compileCellPath(goalVert)
+            this.vertsFromObjs.clear(); //Clears for next time it's called
             return cellPath;
             //Create path using parent connections
         }
