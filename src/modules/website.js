@@ -1,9 +1,5 @@
 // import favicon from "../assets/favicon.ico";
 import createKnightGame from "./knight-game.js";
-import LeaderLine from "leader-line";
-
-// from "../../node_modules/leader-line/leader-line.min.js"
-
 
 /* Header with title and basic navbar */
 function createHeader() {
@@ -38,10 +34,9 @@ function createMain() {
         classList: 'game-container',
     });
 
-
     //Define as needed
     const options = {
-        boardsize: 8,
+        boardsize: 20,
         knightStart: {x:8, y:1},
         knightGoal: {x:8, y:8}
     }
@@ -78,13 +73,11 @@ function createFooter() {
 /* To be called on site load */
 function initializeWebsite() {
     const content = document.getElementById("content");
-
     // Primary site layout
     content.appendChild(createHeader());
     content.appendChild(createMain());
     content.appendChild(createFooter());
     // Primary site functionality
-    //window.KNIGHTGAME.findKnightPath();
     window.KNIGHTGAME.loopFindKnightPath();
 }
 

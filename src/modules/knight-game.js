@@ -1,5 +1,4 @@
 import GameBoard from "./game-board.js";
-// import Knight from "./modules/knight.js";
 import Agent from "./agent.js";
 import LeaderLine from "leader-line";
 
@@ -8,6 +7,21 @@ const defaultOptions = {
     knightStart: {x:1, y:1},
     knightGoal: {x:8, y:8}
 }
+
+/**
+ * @function
+ * 
+ * 
+ * @param {HTMLElement} container Dom container to be populated by our app
+ * @param {gameOptions} options Game options object
+ * @param {number} options.boardsize Number of squares n x n
+ * @param {object} options.knightStart Coordinate object holding x/y
+ * @param {number} options.knightStart.x X coord
+ * @param {number} options.knightStart.y Y coord
+ * @param {object} options.knightGoal Coordinate object holding x/y
+ * @param {number} options.knightGoal.x X coord
+ * @param {number} options.knightGoal.y Y coord
+ */
 
 export default function createKnightGame(container, options = defaultOptions) {
 
@@ -36,6 +50,16 @@ export default function createKnightGame(container, options = defaultOptions) {
                 this.createEventListeners(this.gameDOMContainer);
             };
             // this.setPositions();
+            this._setStyles();
+        }
+
+
+        _setStyles(){
+            let htmlStyles = window.getComputedStyle(document.querySelector("html"));
+            let n = parseInt(htmlStyles.getPropertyValue("--boardsize"));
+            console.log(n);
+            document.documentElement.style.setProperty("--boardsize", this.boardsize);
+            console.log(parseInt(htmlStyles.getPropertyValue("--boardsize")));
         }
 
         //Create the board, cells, and options DOM elements
@@ -252,20 +276,20 @@ export default function createKnightGame(container, options = defaultOptions) {
             let iterationCount = 0;
             while (iterationCount < maxIterations) {
 
-                let x1 = this._getRandomIntInclusive(1, 8);
-                let y1 = this._getRandomIntInclusive(1, 8);
+                let x1 = this._getRandomIntInclusive(1, this.boardsize);
+                let y1 = this._getRandomIntInclusive(1, this.boardsize);
 
-                let x2 = this._getRandomIntInclusive(1, 8);
-                let y2 = this._getRandomIntInclusive(1, 8);
+                let x2 = this._getRandomIntInclusive(1, this.boardsize);
+                let y2 = this._getRandomIntInclusive(1, this.boardsize);
 
                 let startCell = this.board.getCellByCoords(x1, y1);
                 let goalCell = this.board.getCellByCoords(x2, y2);
                 console.log('start cell: ', startCell, 'goal cell: ', goalCell);
                 this.findKnightPath(startCell, goalCell);
-                await this._delay(2000);
+                await this._delay(500);
                 iterationCount++;
             }
-            
+            console.log('# of iterations: ', iterationCount);
         }
     };
 

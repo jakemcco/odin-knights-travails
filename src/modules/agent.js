@@ -11,6 +11,7 @@ class Agent {
     constructor(){
         //Keeps track of unique objects used to key into verts, in this case cells are the keys, values are the corresponding vertices
         this.vertsFromObjs = new Map;
+        //x,y delta from the given coordinates that *could* be a move for the knight (assuming it is on the board)
         this.possibleKnightOffsets = [
             {xOffset:2, yOffset:1},
             {xOffset:1, yOffset:2},
@@ -76,7 +77,7 @@ class Agent {
     _calcKnightMove(board, fromCell, goalCell) {
         let goalFound = false;
         let currDepth = 0;
-        const maxDepth = 10;
+        const maxDepth = 20;
         //Queues of vertices
         const currQ = [];
         const nextQ = [];

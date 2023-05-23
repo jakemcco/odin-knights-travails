@@ -3,6 +3,8 @@
 
     /* Fonts */
 
+    /* Dynamic Variables */
+    --boardsize:0;
   }
 
 *,
@@ -74,7 +76,7 @@ body {
 
 .cell-container {
   display: grid;
-  grid-template-columns: repeat(8, 80px);
+  grid-template-columns: repeat(var(--boardsize), 80px);
   gap: 1px;
   background-color: #000;
   border: 1px solid #000;
